@@ -1,9 +1,7 @@
-import { useContext  } from 'react'
-import { AppContext } from '../App'
 import { Card } from 'react-bootstrap'
 
 const About = () => {
-  const { todos } = useContext(AppContext)
+  const { todos } = []
 
   return (
     <div>
