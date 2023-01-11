@@ -1,6 +1,9 @@
-import { useState, createContext } from "react";
+import { useState } from "react";
+import { Provider } from 'react-redux'
 import { Container } from "react-bootstrap";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import store from './store'
 
 import Header from "./components/Header";
 import Home from "./pages/Home";
@@ -9,18 +12,9 @@ import About from "./pages/About";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-export const AppContext = createContext(null)
-
 const App = () => {
-  const [todos, setTodos] = useState([
-    {
-      text: "This is a sample todo",
-      completed: false,
-    },
-  ]);
-
   return (
-    <AppContext.Provider value={{ todos, setTodos }}>
+    <Provider store={store}>
       <BrowserRouter>
         <Header />
         <Container className="pt-3">
@@ -30,7 +24,7 @@ const App = () => {
           </Routes>
         </Container>
       </BrowserRouter>
-    </AppContext.Provider>
+    </Provider>
   );
 };
 

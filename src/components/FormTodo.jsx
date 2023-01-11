@@ -1,7 +1,10 @@
 import React from 'react'
+import { useDispatch } from 'react-redux';
+import { addTodo } from '../store/actions';
 import { Form, Button } from 'react-bootstrap'
 
-const FormTodo = ({ addTodo }) => {
+const FormTodo = () => {
+  const dispatch = useDispatch()
   const [newTodo, setNewTodo] = React.useState("");
 
   const handleSubmit = (e) => {
@@ -9,7 +12,7 @@ const FormTodo = ({ addTodo }) => {
 
     if (!newTodo) return;
 
-    addTodo(newTodo);
+    dispatch(addTodo(newTodo));
     setNewTodo("");
   };
 
