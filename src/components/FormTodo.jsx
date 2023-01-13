@@ -8,10 +8,12 @@ import { useAuth } from '../contexts/Auth'
 
 const FormTodo = () => {
   const dispatch = useDispatch()
-  const { user } = useAuth()
+  const { session } = useAuth()
+
+  console.log(session)
 
   const emptyTodo = {
-    user: user.id,
+    user: session?.user.id,
     code: nanoid(),
     name: '',
     completed: false
