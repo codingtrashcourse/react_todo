@@ -1,7 +1,6 @@
 
 import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Card } from 'react-bootstrap'
 import Todo from './Todo'
 import { setTodos } from '../store/actions'
 import { supabase } from '../supabase'
