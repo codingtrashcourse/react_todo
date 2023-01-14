@@ -11,7 +11,7 @@ const ListTodo = () => {
   const dispatch = useDispatch()
   const { session } = useAuth()
 
-  useEffect(() => {
+  const fetchTodos = () => {
     supabase
       .from('todos')
       .select('*')
@@ -22,6 +22,10 @@ const ListTodo = () => {
           dispatch(setTodos(data))
         }
       })
+  }
+
+  useEffect(() => {
+    fetchTodos()
   }, [])
 
   const { todos } = useSelector((state) => state.todoReducer)
