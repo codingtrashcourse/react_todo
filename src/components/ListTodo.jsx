@@ -9,13 +9,13 @@ import { useAuth } from '../contexts/Auth'
 
 const ListTodo = () => {
   const dispatch = useDispatch()
-  const { user } = useAuth()
+  const { session } = useAuth()
 
   useEffect(() => {
     supabase
       .from('todos')
       .select('*')
-      .eq('user', user.id)
+      .eq('user', session?.user.id)
       .order('id', { ascending: false })
       .then(({ data, error }) => {
         if(!error) {

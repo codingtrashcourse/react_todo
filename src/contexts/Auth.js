@@ -8,22 +8,27 @@ export const useAuth = () => {
 }
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState()
+  const [session, setSession] = useState(JSON.parse(localStorage.getItem('session')))
 
   useEffect(() => {
-    const session = supabase.auth.session
-    setUser(session?.user ?? null)
+    localStorage.setItem('session', JSON.stringify(session))
+  }, [session])
 
-    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null)
+  useEffect(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange((event, data) => {
+      setSession(data ?? null)
     })
-  }, [])
+
+    return () => {
+      listener.subscription.unsubscribe()
+    }
+  }, [session])
 
   const value = {
     signUp: (data) => supabase.auth.signUp(data),
     signIn: (data) => supabase.auth.signInWithPassword(data),
     signOut: () => supabase.auth.signOut(),
-    user,
+    session,
   }
 
   return <AuthContext.Provider value={value}>{ children }</AuthContext.Provider>
