@@ -12,17 +12,27 @@ const ListTodo = () => {
   const { session } = useAuth()
 
   useEffect(() => {
-    const fetchTodos = () => {
-      supabase
-        .from('todos')
-        .select('*')
+    const fetchTodos = async () => {
+
+      const { data, error } = await supabase
+        .from('todos').select('*')
         .eq('user', session.user.id)
         .order('id', { ascending: false })
-        .then(({ data, error }) => {
-          if(!error) {
-            dispatch(setTodos(data))
-          }
-        })
+
+      if(!error) {
+        dispatch(setTodos(data))
+      }
+
+      // supabase
+      //   .from('todos')
+      //   .select('*')
+      //   .eq('user', session.user.id)
+      //   .order('id', { ascending: false })
+      //   .then(({ data, error }) => {
+      //     if(!error) {
+      //       dispatch(setTodos(data))
+      //     }
+      //   })
     }
 
     fetchTodos()
