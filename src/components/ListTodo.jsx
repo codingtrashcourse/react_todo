@@ -1,5 +1,5 @@
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Card } from 'react-bootstrap'
 import Todo from './Todo'
@@ -10,33 +10,26 @@ import { useAuth } from '../contexts/Auth'
 const ListTodo = () => {
   const dispatch = useDispatch()
   const { session } = useAuth()
+  const [data, setData] = useState([])
 
   useEffect(() => {
-    const fetchTodos = async () => {
-
-      const { data, error } = await supabase
-        .from('todos').select('*')
-        .eq('user', session.user.id)
-        .order('id', { ascending: false })
-
-      if(!error) {
-        dispatch(setTodos(data))
-      }
-
-      // supabase
-      //   .from('todos')
-      //   .select('*')
-      //   .eq('user', session.user.id)
-      //   .order('id', { ascending: false })
-      //   .then(({ data, error }) => {
-      //     if(!error) {
-      //       dispatch(setTodos(data))
-      //     }
-      //   })
-    }
-
-    fetchTodos()
+    supabase
+      .from('todos')
+      .select('*')
+      .eq('user', session.user.id)
+      .order('id', { ascending: false })
+      .then(({ data, error }) => {
+        if(!error) {
+          setData(data)
+        }
+      })
   }, [])
+
+  useEffect(() => {
+    dispatch(setTodos(data))
+  }, [data])
+
+  console.log(data)
 
   const { todos } = useSelector((state) => state.todoReducer)
 
