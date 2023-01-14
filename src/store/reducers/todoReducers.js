@@ -20,7 +20,7 @@ const todoReducer = (state = initialState, action) => {
         ]
       }
     case REMOVE_TODO:
-      const newTodoList = state.todos.filter((item) => item.code != action.payload)
+      const newTodoList = state.todos.filter((item) => item.code !== action.payload)
       return {
         ...state,
         todos: newTodoList
