@@ -10,7 +10,6 @@ import { useAuth } from '../contexts/Auth'
 const ListTodo = () => {
   const dispatch = useDispatch()
   const { session } = useAuth()
-  const [data, setData] = useState([])
 
   useEffect(() => {
     supabase
@@ -20,16 +19,10 @@ const ListTodo = () => {
       .order('id', { ascending: false })
       .then(({ data, error }) => {
         if(!error) {
-          setData(data)
+          dispatch(setTodos(data))
         }
       })
-  }, [])
-
-  useEffect(() => {
-    dispatch(setTodos(data))
-  }, [data])
-
-  console.log(data)
+  }, [session, dispatch])
 
   const { todos } = useSelector((state) => state.todoReducer)
 
