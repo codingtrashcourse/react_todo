@@ -11,20 +11,20 @@ const ListTodo = () => {
   const dispatch = useDispatch()
   const { session } = useAuth()
 
-  const fetchTodos = () => {
-    supabase
-      .from('todos')
-      .select('*')
-      .eq('user', session?.user.id)
-      .order('id', { ascending: false })
-      .then(({ data, error }) => {
-        if(!error) {
-          dispatch(setTodos(data))
-        }
-      })
-  }
-
   useEffect(() => {
+    const fetchTodos = () => {
+      supabase
+        .from('todos')
+        .select('*')
+        .eq('user', session.user.id)
+        .order('id', { ascending: false })
+        .then(({ data, error }) => {
+          if(!error) {
+            dispatch(setTodos(data))
+          }
+        })
+    }
+
     fetchTodos()
   }, [])
 
