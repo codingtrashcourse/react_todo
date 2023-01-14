@@ -1,4 +1,4 @@
-import { SET_TODOS, ADD_TODO, REMOVE_TODO, COMPLETE_TODO } from "./types";
+import { SET_TODOS, ADD_TODO, REMOVE_TODO, COMPLETE_TODO, CHANGE_COLOR_TODO } from "./types";
 
 export const setTodos = (payload) => {
   return {
@@ -24,6 +24,13 @@ export const removeTodo = (payload) => {
 export const completeTodo = (payload) => {
   return {
     type: COMPLETE_TODO,
+    payload
+  }
+}
+
+export const changeColorTodo = (payload) => {
+  return {
+    type: CHANGE_COLOR_TODO,
     payload
   }
 }

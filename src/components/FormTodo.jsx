@@ -16,7 +16,8 @@ const FormTodo = () => {
     user: session?.user.id,
     code: nanoid(),
     name: '',
-    completed: false
+    completed: false,
+    color: 'default'
   }
 
   const [newTodo, setNewTodo] = React.useState(emptyTodo);

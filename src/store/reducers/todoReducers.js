@@ -1,4 +1,4 @@
-import { SET_TODOS, ADD_TODO, REMOVE_TODO, COMPLETE_TODO } from "../actions/types";
+import { SET_TODOS, ADD_TODO, REMOVE_TODO, COMPLETE_TODO, CHANGE_COLOR_TODO } from "../actions/types";
 
 const initialState = {
   todos: [],
@@ -34,6 +34,16 @@ const todoReducer = (state = initialState, action) => {
       return {
         ...state,
         todos
+      }
+    case CHANGE_COLOR_TODO:
+      const currentTodos = JSON.parse(JSON.stringify(state.todos))
+      const todoIndex = currentTodos.findIndex((item) => item.code === action.payload.code)
+
+      currentTodos[todoIndex].color = action.payload.color
+
+      return {
+        ...state,
+        todos: currentTodos
       }
     default:
       return state
