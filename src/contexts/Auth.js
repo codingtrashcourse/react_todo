@@ -1,5 +1,4 @@
 import { useContext, createContext, useState, useEffect } from 'react'
-import { supabase } from '../supabase'
 
 const AuthContext = createContext()
 
@@ -8,27 +7,39 @@ export const useAuth = () => {
 }
 
 export const AuthProvider = ({ children }) => {
-  const [session, setSession] = useState(JSON.parse(localStorage.getItem('session')))
+  const [token, setToken] = useState(localStorage.getItem('token'))
 
   useEffect(() => {
-    localStorage.setItem('session', JSON.stringify(session))
-  }, [session])
+    localStorage.setItem('token', token)
+  }, [token])
 
-  useEffect(() => {
-    const { data: listener } = supabase.auth.onAuthStateChange((event, data) => {
-      setSession(data ?? null)
-    })
+  const signUp = (data) => {
+    console.log(data)
+  }
 
-    return () => {
-      listener.subscription.unsubscribe()
+  const signIn = async (data) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/authenticate`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(data),
+      })
+      const { token } = await response.json()
+      setToken(token)
+    } catch (error) {
+      console.log(error)
     }
-  }, [session])
+  }
+
+  const signOut = () => localStorage.removeItem('token')
 
   const value = {
-    signUp: (data) => supabase.auth.signUp(data),
-    signIn: (data) => supabase.auth.signInWithPassword(data),
-    signOut: () => supabase.auth.signOut(),
-    session,
+    signUp,
+    signIn,
+    signOut,
+    token,
   }
 
   return <AuthContext.Provider value={value}>{ children }</AuthContext.Provider>

@@ -4,13 +4,12 @@ import { useAuth } from '../contexts/Auth'
 
 const Header = () => {
   const navigate = useNavigate()
-  const { session, signOut } = useAuth()
+  const { token, signOut } = useAuth()
 
   const handleSignOut = async (e) => {
     e.preventDefault()
 
     await signOut()
-    localStorage.removeItem('session')
     navigate('/signin')
   }
 
@@ -24,7 +23,7 @@ const Header = () => {
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/about">About</Nav.Link>
             {
-              session &&
+              token &&
               <Nav.Link onClick={handleSignOut}>Sign Out</Nav.Link>
             }
           </Nav>

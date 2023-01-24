@@ -4,9 +4,9 @@ import FormTodo from '../components/FormTodo'
 import ListTodo from '../components/ListTodo'
 
 const Home = () => {
-  const { session } = useAuth()
+  const { token } = useAuth()
 
-  return session ? (
+  return token ? (
     <div>
       <FormTodo />
       <ListTodo />

@@ -2,42 +2,36 @@ import React from 'react'
 import { useDispatch } from 'react-redux';
 import { addTodo } from '../store/actions';
 import { Form, Button } from 'react-bootstrap'
-import { nanoid } from 'nanoid'
-import { supabase } from '../supabase'
 import { useAuth } from '../contexts/Auth'
 
 const FormTodo = () => {
   const dispatch = useDispatch()
-  const { session } = useAuth()
+  const { token } = useAuth()
 
-  console.log(session)
+  const [title, setTitle] = React.useState('');
 
-  const emptyTodo = {
-    user: session?.user.id,
-    code: nanoid(),
-    name: '',
-    completed: false,
-    color: 'default'
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
 
-  const [newTodo, setNewTodo] = React.useState(emptyTodo);
+    if (!title) return;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (!newTodo) return;
-
-    supabase
-      .from('todos')
-      .insert(newTodo)
-      .single()
-      .then(({ data, error }) => {
-        if(!error) {
-          dispatch(addTodo(newTodo));
-          setNewTodo({ ...newTodo, code: nanoid(), name: '' });
-        }
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/todos`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ title }),
       })
-  };
+      const { todo } = await response.json()
+  
+      dispatch(addTodo(todo));
+      setTitle('');
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -46,8 +40,8 @@ const FormTodo = () => {
         <Form.Control
           type="text"
           className="input"
-          value={newTodo.name}
-          onChange={(e) => setNewTodo({ ...newTodo, name: e.target.value })}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         ></Form.Control>
       </Form.Group>
       <Button variant="primary" className="my-3" type="submit">
