@@ -2,9 +2,11 @@ import { useDispatch } from "react-redux";
 import { completeTodo, removeTodo, changeColorTodo } from '../store/actions'
 import { Card, ButtonToolbar, ButtonGroup, Button } from "react-bootstrap";
 import { supabase } from '../supabase'
+import { useAuth } from '../contexts/Auth'
 
-const Todo = ({ todo, colors }) => {
+const Todo = ({ todo }) => {
   const dispatch = useDispatch()
+  const { token } = useAuth()
 
   const handleChangeColor = (color) => {
     supabase
@@ -13,52 +15,51 @@ const Todo = ({ todo, colors }) => {
       .match({ code: todo.code })
       .then(({ data, error }) => {
         if(!error) {
-          dispatch(changeColorTodo({ code: todo.code, color }))
+          dispatch(changeColorTodo({ code: todo.id, color }))
         }
       })
   }
 
-  const handleCompleteTodo = (e) => {
+  const handleCompleteTodo = async (e) => {
     e.preventDefault()
 
-    supabase
-      .from('todos')
-      .update({ completed: !todo.completed, updated_at: new Date() })
-      .match({ code: todo.code })
-      .then(({ data, error }) => {
-        if(!error) {
-          dispatch(completeTodo(todo.code))
-        }
+    try {
+      await fetch(`${process.env.REACT_APP_API_URL}/todos/${todo.id}/complete`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
-  }
-
-  const handleRemoveTodo = (e) => {
-    e.preventDefault()
-
-    supabase
-      .from('todos')
-      .delete()
-      .match({ code: todo.code })
-      .then(({ error }) => {
-        if(!error) {
-          dispatch(removeTodo(todo.code))
-        }
-      })
+  
+      dispatch(completeTodo(todo.id))
+    } catch (error) {
+      console.log(error)
     }
+  }
+
+  const handleRemoveTodo = async (e) => {
+    e.preventDefault()
+
+    try {
+      await fetch(`${process.env.REACT_APP_API_URL}/todos/${todo.id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+  
+      dispatch(removeTodo(todo.id))
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
-    <Card border={colors[todo.color]} className="mb-2">
+    <Card className="mb-2" style={{ borderColor: todo.color }}>
       <Card.Body className="todo">
         <span style={{ textDecoration: todo.completed ? "line-through" : "" }}>
-          { todo.name }
+          { todo.title }
         </span>
           <ButtonToolbar>
-            <ButtonGroup size="sm" className="me-2">
-             { Object.keys(colors).map((color, index) => (
-              <Button key={index} variant={colors[color]} onClick={e => { e.preventDefault(); handleChangeColor(color) }}>{color[0]}</Button>
-             )) }
-            </ButtonGroup>
-
             <ButtonGroup>
               <Button
                 variant={todo.completed ? "success" : "outline-success"}

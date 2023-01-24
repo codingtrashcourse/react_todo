@@ -16,12 +16,11 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const { error } = await signIn(formData)
-
-    if(error) {
-      alert('error signing in')
-    } else {
+    try {
+      await signIn(formData)
       navigate('/')
+    } catch (error) {
+      alert('error signing in')
     }
   }
 

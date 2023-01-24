@@ -20,14 +20,14 @@ const todoReducer = (state = initialState, action) => {
         ]
       }
     case REMOVE_TODO:
-      const newTodoList = state.todos.filter((item) => item.code !== action.payload)
+      const newTodoList = state.todos.filter((item) => item.id !== action.payload)
       return {
         ...state,
         todos: newTodoList
       }
     case COMPLETE_TODO:
       const todos = JSON.parse(JSON.stringify(state.todos))
-      const index = todos.findIndex((item) => item.code === action.payload)
+      const index = todos.findIndex((item) => item.id === action.payload)
 
       todos[index].completed = !todos[index].completed
 
@@ -37,7 +37,7 @@ const todoReducer = (state = initialState, action) => {
       }
     case CHANGE_COLOR_TODO:
       const currentTodos = JSON.parse(JSON.stringify(state.todos))
-      const todoIndex = currentTodos.findIndex((item) => item.code === action.payload.code)
+      const todoIndex = currentTodos.findIndex((item) => item.id === action.payload.code)
 
       currentTodos[todoIndex].color = action.payload.color
 
