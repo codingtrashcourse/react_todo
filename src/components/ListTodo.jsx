@@ -23,20 +23,10 @@ const ListTodo = () => {
 
   const { todos } = useSelector((state) => state.todoReducer);
 
-  const colors = {
-    blue: "primary",
-    green: "success",
-    red: "danger",
-    yellow: "warning",
-    lightblue: "info",
-    black: "dark",
-    default: "secondary",
-  };
-
   return (
     <div>
       {todos.map((todo, index) => (
-        <Todo key={index} todo={todo} colors={colors}></Todo>
+        <Todo key={index} todo={todo}></Todo>
       ))}
     </div>
   );

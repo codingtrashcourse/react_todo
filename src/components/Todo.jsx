@@ -4,7 +4,7 @@ import { Card, ButtonToolbar, ButtonGroup, Button } from "react-bootstrap";
 import { supabase } from '../supabase'
 import { useAuth } from '../contexts/Auth'
 
-const Todo = ({ todo, colors }) => {
+const Todo = ({ todo }) => {
   const dispatch = useDispatch()
   const { token } = useAuth()
 
