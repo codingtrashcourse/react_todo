@@ -1,24 +1,11 @@
 import { useDispatch } from "react-redux";
 import { completeTodo, removeTodo, changeColorTodo } from '../store/actions'
 import { Card, ButtonToolbar, ButtonGroup, Button } from "react-bootstrap";
-import { supabase } from '../supabase'
 import { useAuth } from '../contexts/Auth'
 
 const Todo = ({ todo }) => {
   const dispatch = useDispatch()
   const { token } = useAuth()
-
-  const handleChangeColor = (color) => {
-    supabase
-      .from('todos')
-      .update({ color, updated_at: new Date() })
-      .match({ code: todo.code })
-      .then(({ data, error }) => {
-        if(!error) {
-          dispatch(changeColorTodo({ code: todo.id, color }))
-        }
-      })
-  }
 
   const handleCompleteTodo = async (e) => {
     e.preventDefault()
