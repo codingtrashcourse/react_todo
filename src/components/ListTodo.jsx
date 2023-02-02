@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Todo from "./Todo";
 import { setTodos } from "../store/actions";
-import { supabase } from "../supabase";
 import { useAuth } from "../contexts/Auth";
 
 const ListTodo = () => {

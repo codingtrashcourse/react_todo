@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { completeTodo, removeTodo, changeColorTodo } from '../store/actions'
+import { completeTodo, removeTodo } from '../store/actions'
 import { Card, ButtonToolbar, ButtonGroup, Button } from "react-bootstrap";
 import { useAuth } from '../contexts/Auth'
 
